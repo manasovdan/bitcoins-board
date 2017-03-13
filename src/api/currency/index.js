@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import currency from './currency'
+import { show } from './controller'
 
 const router = new Router();
 
-router.use('/currencies', currency);
+router.get('/', show);
 
 export default router
