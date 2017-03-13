@@ -13,12 +13,6 @@ heroku apps:create my-new-app
 # add heroku remote reference to the local repository
 heroku git:remote --app my-new-app
 
-# add the MongoLab addon to the heroku app
-heroku addons:create mongolab
-
-# set the environment variables to the heroku app (see the .env file in root directory)
-heroku config:set MASTER_KEY=masterKey JWT_SECRET=jwtSecret
-
 # commit and push the files
 git add -A
 git commit -m "Initial commit"
