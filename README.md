@@ -4,7 +4,9 @@ Ticker showing bitcoin/EUR currencies from [btc-e.com](https://btc-e.com/api/3/t
 
 ## Routes
 [Stored currencies](https://bitcoin-eur-board.herokuapp.com/currencies/)
+
 [Show Best currencies](https://bitcoin-eur-board.herokuapp.com/currencies/best)
+
 [Update currencies](https://bitcoin-eur-board.herokuapp.com/currencies/update) - should be POST by REST API, but I did GET
 
 ## Deploy
