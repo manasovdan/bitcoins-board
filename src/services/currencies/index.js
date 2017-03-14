@@ -4,24 +4,32 @@ import parseFeeds from './parser'
 export let currencies = {};
 
 export function getBestCurrency() {
-  return Object.keys(currencies).reduce((result, source) => {
-    if (currencies[source].buy < result.buy.price) {
-      result.buy = {
-        source,
-        price: currencies[source].buy
+  return Object.keys(currencies).reduce((result, sourceName) => {
+    const source = currencies[sourceName];
+    Object.keys(source.currencies).forEach((currencyName) => {
+      const currency = source.currencies[currencyName];
+      const currencySymbolIsNew = !{}.hasOwnProperty.call(result, currencyName);
+      if (currencySymbolIsNew) {
+        result[currencyName] = {
+          sell: { price: 0 },
+          buy: { price: Infinity }
+        }
       }
-    }
-    if (currencies[source].sell > result.sell.price) {
-      result.sell = {
-        source,
-        price: currencies[source].sell
+      if (currency.buy < result[currencyName].buy.price) {
+        result[currencyName].buy = {
+          sourceName,
+          price: currency.buy
+        }
       }
-    }
+      if (currency.sell > result[currencyName].sell.price) {
+        result[currencyName].sell = {
+          sourceName,
+          price: currency.sell
+        }
+      }
+    });
     return result;
-  }, {
-    sell: { price: 0 },
-    buy: { price: Infinity }
-  })
+  }, {})
 }
 
 export function updateCurrencies() {

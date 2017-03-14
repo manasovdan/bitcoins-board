@@ -1,8 +1,9 @@
-import _ from 'lodash'
 import Promise from 'bluebird'
 import request from 'request-promise'
 import feeds from './feeds'
 import logger from '../logger'
+
+const REQUEST_TIMEOUT = 3000;
 
 function ignore(error, currencies) {
   logger.error(error);
@@ -15,14 +16,21 @@ function ref(obj, str) {
 
 function parse(requestResult, feed) {
   const json = JSON.parse(requestResult);
-  return { sell: ref(json, feed.sell), buy: ref(json, feed.buy) }
+  return feed.currencies.reduce((result, currency) => {
+    result[currency.symbol] = {
+      sell: ref(json, currency.sell),
+      buy: ref(json, currency.buy)
+    };
+    return result;
+  }, {});
 }
 
 export default function() {
-  return new Promise.resolve(Object.keys(feeds))
-    .reduce((currencies, feedName) => request(feeds[feedName].url, { timeout: 2000 })
+
+  return new Promise.resolve(feeds)
+    .reduce((currencies, feed) => request(feed.url, { timeout: REQUEST_TIMEOUT })
       .then((requestResult) => {
-        currencies[feedName] = _.merge({ updated_at: new Date() }, parse(requestResult, feeds[feedName]));
+        currencies[feed.name] = { updated_at: new Date(), currencies: parse(requestResult, feed) };
         return currencies;
       })
       .catch(error => ignore(error, currencies)), {})
