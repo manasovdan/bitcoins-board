@@ -1,6 +1,5 @@
 .DS_Store
 node_modules
-public
 .tmp
 .idea
 .log
@@ -12,4 +11,4 @@ npm-debug.log
 coverage
 cassettes
 .idea
-public/dist
+./public/dist/*
