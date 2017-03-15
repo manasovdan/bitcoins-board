@@ -30,6 +30,7 @@ export default function() {
   return new Promise.resolve(feeds)
     .reduce((currencies, feed) => request(feed.url, { timeout: REQUEST_TIMEOUT })
       .then((requestResult) => {
+        if (feed.name === 'xignite.com') console.log(requestResult);
         currencies[feed.name] = { updated_at: new Date(), currencies: parse(requestResult, feed) };
         return currencies;
       })
