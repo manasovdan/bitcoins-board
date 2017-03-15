@@ -4,7 +4,8 @@
   "main": "src",
   "private": true,
   "scripts": {
-    "build": "webpack --config ./webpack.config.js",
+    "heroku-prebuild": "npm run build",
+    "build": "NODE_ENV=production webpack --config ./webpack.config.js",
     "start": "node .",
     "dev": "nodemon .",
     "lint": "eslint src"
