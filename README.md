@@ -2,13 +2,6 @@
 
 Ticker showing bitcoin/EUR currencies from [btc-e.com](https://btc-e.com/api/3/ticker/btc_eur-btc_usd) and [blockchain.info](https://blockchain.info/ticker)
 
-## Routes
-[Stored currencies](https://bitcoin-eur-board.herokuapp.com/currencies/)
-
-[Show Best currencies](https://bitcoin-eur-board.herokuapp.com/currencies/best)
-
-[Update currencies](https://bitcoin-eur-board.herokuapp.com/currencies/update) - should be POST by REST API, but I did GET
-
 ## Deploy
 
 Here is an example on how to deploy to [Heroku](https://heroku.com) using [Heroku CLI](https://devcenter.heroku.com/articles/heroku-command-line):
