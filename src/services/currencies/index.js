@@ -7,9 +7,6 @@ export let currencies = {};
 export let bestCurrencies = {};
 
 export function updateBestCurrency() {
-  function increaseTotalSources(result, currencyName) {
-    result[currencyName].status.total += 1;
-  }
 
   function increaseActiveSources(result, currencyName) {
     result[currencyName].status.active += 1;
@@ -49,7 +46,6 @@ export function updateBestCurrency() {
     Object.keys(source.currencies).forEach((currencyName) => {
       initBestCurrencyTemplateIfDoesntExist(result, currencyName);
       const currency = source.currencies[currencyName];
-      increaseTotalSources(result, currencyName); // TODO store total sources number somewhere instead of calculating
       if (new Date(source.updated_at) < lastParseTime) return;
       increaseActiveSources(result, currencyName);
       checkAndUpdateBestBuyPrice(currency, result, currencyName, sourceName);
