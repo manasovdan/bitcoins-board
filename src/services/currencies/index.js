@@ -19,7 +19,7 @@ export function updateBestCurrency() {
     const currencySymbolIsNew = !{}.hasOwnProperty.call(result, currencyName);
     if (currencySymbolIsNew) {
       result[currencyName] = {
-        status: { active: 0, total: 0 },
+        status: { active: 0, total: 2 },
         sell: { price: 0 },
         buy: { price: Infinity }
       }
