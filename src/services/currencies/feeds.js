@@ -46,6 +46,7 @@ const feeds = [
   {
     name: 'xignite.com',
     url: 'http://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRate?Symbol=EURUSD&_token=163AC8BF535B404B9EF83A9F085A5671',
+    errorField: 'Message',
     currencies: [
       {
         symbol: 'EUR/USD',
@@ -56,4 +57,4 @@ const feeds = [
   }
 ];
 
-export default feeds
+module.exports = feeds;

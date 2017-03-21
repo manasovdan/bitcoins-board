@@ -10,17 +10,17 @@ const socket = io('/', {
 
 const data = {
   'BTC/EUR': {
-    status: { active: 2, total: 2 },
+    active: 2, total: 2,
     sell: { sourceName: 'blockchain.info', price: 1172.42 },
     buy: { sourceName: 'btc-e.com', price: 1147.26027 }
   },
   'BTC/USD': {
-    status: { active: 2, total: 2 },
+    active: 2, total: 2,
     sell: { sourceName: 'blockchain.info', price: 1251.35 },
     buy: { sourceName: 'btc-e.com', price: 1237.498 }
   },
   'EUR/USD': {
-    status: { active: 2, total: 2 },
+    active: 2, total: 2,
     sell: { sourceName: 'oanda.com', price: '1.06778' },
     buy: { sourceName: 'xignite.com', price: '1.06234' }
   }
@@ -30,17 +30,21 @@ function Currency(props) {
   const data = props.currencyData;
   return (
     <div className="currencyInfo">
-      <h4>{props.currencySymbol} <span className="status">{data.status.active} / {data.status.total}</span></h4>
-      <div className="cell">
-        <span className="price">{data.sell.price}</span>
-        <span>Best sell price</span>
-        <span className="sourceName">from: {data.sell.sourceName}</span>
-      </div>
-      <div className="cell">
-        <span className="price">{data.buy.price}</span>
-        <span>Best buy price</span>
-        <span className="sourceName">from: {data.buy.sourceName}</span>
-      </div>
+      <h4>{props.currencySymbol} <span className="status">{data.active} / {data.total}</span></h4>
+      {data.sell && (
+        <div className="cell">
+          <span className="price">{data.sell.price}</span>
+          <span>Best sell price</span>
+          <span className="sourceName">from: {data.sell.sourceName || '-'}</span>
+        </div>
+      )}
+      {data.buy && (
+        <div className="cell">
+          <span className="price">{data.buy.price}</span>
+          <span>Best buy price</span>
+          <span className="sourceName">from: {data.buy.sourceName || '-'}</span>
+        </div>
+      )}
     </div>
   )
 }

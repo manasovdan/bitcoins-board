@@ -1,67 +1,34 @@
-import _ from 'lodash'
-import parseFeeds from './parser'
+const _ = require('lodash');
+const parseFeeds = require('./parser');
 
-let lastParseTime = new Date();
-export let currencies = {};
-
-export let bestCurrencies = {};
-
-export function updateBestCurrency() {
-
-  function increaseActiveSources(result, currencyName) {
-    result[currencyName].status.active += 1;
-  }
-
-  function initBestCurrencyTemplateIfDoesntExist(result, currencyName) {
-    const currencySymbolIsNew = !{}.hasOwnProperty.call(result, currencyName);
-    if (currencySymbolIsNew) {
-      result[currencyName] = {
-        status: { active: 0, total: 2 },
-        sell: { price: 0 },
-        buy: { price: Infinity }
-      }
+function calculateBestCurrencies(currencies) {
+  function checkAndUpdateBestBuyPrice(currency, feedResult) {
+    if (!currency.buy || currency.buy.price > feedResult.buy) {
+      currency.buy = {
+        sourceName: feedResult.sourceName,
+        price: feedResult.buy
+      };
     }
   }
 
-  function checkAndUpdateBestBuyPrice(currency, result, currencyName, sourceName) {
-    if (currency.buy < result[currencyName].buy.price) {
-      result[currencyName].buy = {
-        sourceName,
-        price: currency.buy
-      }
+  function checkAndUpdateBestSellPrice(currency, feedResult) {
+    if (!currency.sell || currency.sell.price < feedResult.sell) {
+      currency.sell = {
+        sourceName: feedResult.sourceName,
+        price: feedResult.sell
+      };
     }
   }
 
-  function checkAndUpdateBestSellPrice(currency, result, currencyName, sourceName) {
-    if (currency.sell > result[currencyName].sell.price) {
-      result[currencyName].sell = {
-        sourceName,
-        price: currency.sell
-      }
-    }
-  }
-
-  bestCurrencies = Object.keys(currencies).reduce((result, sourceName) => {
-    const source = currencies[sourceName];
-    Object.keys(source.currencies).forEach((currencyName) => {
-      initBestCurrencyTemplateIfDoesntExist(result, currencyName);
-      const currency = source.currencies[currencyName];
-      if (new Date(source.updated_at) < lastParseTime) return;
-      increaseActiveSources(result, currencyName);
-      checkAndUpdateBestBuyPrice(currency, result, currencyName, sourceName);
-      checkAndUpdateBestSellPrice(currency, result, currencyName, sourceName);
+  Object.keys(currencies).forEach((currencySymbol) => {
+    const currency = currencies[currencySymbol];
+    currency.active = currency.feedResults.length;
+    currency.feedResults.forEach((feedResult) => {
+      checkAndUpdateBestBuyPrice(currency, feedResult);
+      checkAndUpdateBestSellPrice(currency, feedResult);
     });
-    return result;
-  }, {});
-  return bestCurrencies;
+  });
+  return currencies;
 }
 
-export function updateCurrencies() {
-  lastParseTime = new Date();
-  return parseFeeds().then((newCurrencies) => {
-    currencies = _.merge(currencies, newCurrencies);
-    return currencies;
-  })
-}
-
-export default currencies;
+module.exports = () => parseFeeds().then(calculateBestCurrencies);

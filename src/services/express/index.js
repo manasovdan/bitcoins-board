@@ -1,17 +1,15 @@
-import express from 'express'
-import cors from 'cors'
-import compression from 'compression'
-import morgan from 'morgan'
+const express = require('express');
+const cors = require('cors');
+const compression = require('compression');
+const morgan = require('morgan');
 
-export default () => {
+module.exports = () => {
   const app = express();
 
   app.use(cors());
   app.use(compression());
   app.use(morgan('dev'));
-
-  
   app.use(express.static('public'));
 
-  return app
-}
+  return app;
+};

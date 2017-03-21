@@ -1,4 +1,4 @@
-import path from 'path'
+const path = require('path');
 
 const config = {
   root: path.join(__dirname, '..'),
@@ -7,4 +7,3 @@ const config = {
 };
 
 module.exports = config;
-export default module.exports
