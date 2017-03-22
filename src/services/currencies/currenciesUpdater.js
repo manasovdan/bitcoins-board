@@ -1,6 +1,6 @@
 const getBestCurrency = require('./');
 
-const sendSocket = (io) => {
+const currencyUpdateWorker = (io) => {
   function getCurrenciesAndSendToUsers() {
     return getBestCurrency().then(bestCurrencies => io.emit('updateCurrency', bestCurrencies));
   }
@@ -9,4 +9,4 @@ const sendSocket = (io) => {
   process.on('exit', () => clearInterval(interval));
 };
 
-module.exports = io => sendSocket(io);
+module.exports = io => currencyUpdateWorker(io);
